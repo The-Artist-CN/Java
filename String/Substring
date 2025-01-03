@@ -1,0 +1,150 @@
+在 Java 中，处理字符串子串的操作非常常见。以下是关于子串操作的详细知识，包括常用方法和应用场景：
+
+---
+
+### 1. **`substring()` 方法**
+Java 的 `String` 类提供了 `substring()` 方法，用于从字符串中提取子串。
+
+#### 语法：
+
+String substring(int beginIndex)
+String substring(int beginIndex, int endIndex)
+
+
+- `beginIndex`: 起始索引（包含）。
+- `endIndex`: 结束索引（不包含）。
+
+#### 示例：
+
+String str = "Hello, World!";
+System.out.println(str.substring(7));        // 输出: World!
+System.out.println(str.substring(0, 5));     // 输出: Hello
+
+
+---
+
+### 2. **截取字符串前或后部分**
+- **获取前部分：**
+  
+  String prefix = str.substring(0, n);  // 截取前 n 个字符
+  
+- **获取后部分：**
+  
+  String suffix = str.substring(str.length() - n);  // 截取最后 n 个字符
+  
+
+#### 示例：
+
+String str = "abcdef";
+System.out.println(str.substring(0, 3));         // 输出: abc
+System.out.println(str.substring(str.length() - 3)); // 输出: def
+
+
+---
+
+### 3. **`split()` 分割字符串**
+虽然 `split()` 的主要用途是分割字符串，但可以用来间接提取子串。
+
+#### 示例：
+
+String str = "apple,banana,cherry";
+String[] parts = str.split(",");
+System.out.println(parts[0]);  // 输出: apple
+System.out.println(parts[1]);  // 输出: banana
+
+
+---
+
+### 4. **`indexOf()` 和 `lastIndexOf()` 查找子串位置**
+- **`indexOf(String s)`**：返回子串第一次出现的索引。
+- **`lastIndexOf(String s)`**：返回子串最后一次出现的索引。
+
+#### 示例：
+
+String str = "Hello, World!";
+System.out.println(str.indexOf("o"));       // 输出: 4
+System.out.println(str.lastIndexOf("o"));  // 输出: 8
+
+
+结合 `substring()` 可以提取特定范围的子串：
+
+String str = "I love programming";
+int start = str.indexOf("love");
+int end = str.indexOf("programming");
+String result = str.substring(start, end).trim();
+System.out.println(result); // 输出: love
+
+
+---
+
+### 5. **`contains()` 判断是否包含子串**
+如果只需要判断字符串中是否包含某个子串，可以使用 `contains()`：
+
+String str = "Hello, World!";
+System.out.println(str.contains("World"));  // 输出: true
+
+
+---
+
+### 6. **`startsWith()` 和 `endsWith()` 检查前后缀**
+- **`startsWith(String prefix)`**：检查字符串是否以某个子串开头。
+- **`endsWith(String suffix)`**：检查字符串是否以某个子串结尾。
+
+#### 示例：
+
+String str = "Hello, World!";
+System.out.println(str.startsWith("Hello"));  // 输出: true
+System.out.println(str.endsWith("World!"));   // 输出: true
+
+
+---
+
+### 7. **从字符串中提取单词或特定部分**
+通过正则表达式和子串操作可以灵活提取特定内容。
+
+#### 使用正则表达式：
+
+String str = "I have 123 apples";
+String digits = str.replaceAll("\\D+", ""); // 提取数字
+System.out.println(digits); // 输出: 123
+
+
+---
+
+### 8. **子串的不可变性**
+Java 的字符串是不可变的（`immutable`），`substring()` 返回的新字符串是一个新的对象，与原字符串无关。
+
+#### 示例：
+
+String original = "abcdef";
+String sub = original.substring(0, 3);
+System.out.println(sub); // 输出: abc
+
+
+---
+
+### 9. **常见错误和注意事项**
+- **索引越界**：`beginIndex` 和 `endIndex` 必须在字符串范围内，否则会抛出 `StringIndexOutOfBoundsException`。
+  
+  String str = "Hello";
+  System.out.println(str.substring(10)); // 会抛异常
+  
+- **空字符串处理**：调用 `substring()` 方法时要注意是否为空字符串。
+  
+  String str = "";
+  if (!str.isEmpty()) {
+      System.out.println(str.substring(0, 1));
+  }
+  
+
+---
+
+### 10. **实践练习**
+给定一个字符串，提取其中某个单词：
+
+String sentence = "The quick brown fox jumps over the lazy dog";
+String word = sentence.substring(16, 19);
+System.out.println(word); // 输出: fox
+
+
+如果还有具体需求或疑问，可以告诉我！

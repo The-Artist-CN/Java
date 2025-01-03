@@ -1,0 +1,150 @@
+### 什么是不可变性？
+
+不可变性（Immutability）是指对象一旦被创建，其状态（字段的值）就无法更改。对于 `String` 类来说，这意味着创建一个字符串后，其内容不能被修改。任何对字符串内容的“修改”都会创建一个新的字符串对象，而不是改变原对象。
+
+---
+
+### 为什么 `String` 是不可变的？
+
+不可变性设计的核心在于提高**安全性**、**效率**和**多线程的线程安全性**。下面详细说明：
+
+---
+
+### 1. **不可变性的实现方式**
+
+#### 1.1 字段声明为 `final`
+
+private final char[] value;
+
+- `final` 关键字确保 `value` 的引用一旦初始化后就不能再指向其他字符数组。
+- 虽然 `final` 仅能限制引用不可更改，但由于 `String` 类对外界隐藏了 `value` 字段，无法直接修改内容，因此保证了不可变性。
+
+#### 1.2 没有提供修改内容的方法
+- `String` 类中的所有方法，如 `substring()`、`toUpperCase()` 等，都是返回一个新的字符串对象，而不会对原字符串进行任何更改。
+
+#### 1.3 构造方法设计
+- 构造方法通过传入参数将数据深拷贝到 `value` 字段，避免外部对象直接操作 `value`。
+- 示例：
+  
+  public String(String var1) {
+      this.value = var1.value;
+  }
+  
+  这个深拷贝方式会确保新对象与原始字符串是独立的。
+
+---
+
+### 2. **不可变性带来的好处**
+
+#### 2.1 **线程安全**
+由于字符串的内容无法更改，因此可以在多线程环境中安全地共享字符串对象，而无需同步。
+- 示例：
+  
+  String shared = "Hello";
+  Runnable task = () -> System.out.println(shared.toUpperCase());
+  new Thread(task).start();
+  new Thread(task).start();
+  
+  两个线程可以同时安全地访问 `shared`，因为其内容无法被修改。
+
+#### 2.2 **提升性能（字符串池）**
+ 使用了字符串池（String Pool）来复用字符串对象。如果字符串是可变的，字符串池的复用机制会变得非常危险。
+- 示例：
+  
+  String s1 = "hello";
+  String s2 = "hello";
+  System.out.println(s1 == s2); // 输出: true，s1 和 s2 指向同一个对象
+  
+
+- 如果字符串是可变的：
+  
+  s1.toUpperCase();  // 改变了内容
+  System.out.println(s2);  // s2 的内容也会变，导致数据污染
+  
+
+#### 2.3 **作为哈希表的键**
+不可变性保证了字符串的哈希值（`hashCode`）一旦计算出来就不会改变，这使得字符串特别适合作为哈希表（如 `HashMap`）的键。
+- 示例：
+  
+  Map<String, String> map = new HashMap<>();
+  map.put("key", "value");
+  
+  如果字符串是可变的，修改字符串内容后哈希值会变化，导致无法正确定位键，破坏了哈希表的完整性。
+
+#### 2.4 **防止安全漏洞**
+字符串被广泛用于存储敏感数据（如用户名、密码等），其不可变性可以防止字符串被恶意篡改。
+- 示例：如果密码以字符串存储，不能通过引用修改其内容。
+
+---
+
+### 3. **不可变性的实际表现**
+
+#### 3.1 字符串操作返回新对象
+任何对字符串内容的“修改”，都会生成一个新的字符串对象，而不会修改原字符串。
+
+- 示例：
+  
+  String str = "hello";
+  String upperStr = str.toUpperCase();
+  System.out.println(str);       // 输出: hello
+  System.out.println(upperStr);  // 输出: HELLO
+  
+  - 原字符串 `str` 内容未变。
+  - 新字符串 `upperStr` 存储了转换后的值。
+
+#### 3.2 字符串池优化
+
+String str1 = "hello";
+String str2 = "hello";
+System.out.println(str1 == str2); // 输出: true
+
+- 字符串常量池会复用相同的字符串对象，提高内存效率。
+- 这得益于字符串的不可变性，保证对象的状态不受修改。
+
+---
+
+### 4. **不可变性带来的问题**
+
+#### 4.1 内存开销
+频繁的字符串拼接会导致大量临时对象的创建，增加内存开销。
+- 示例：
+  
+  String str = "a";
+  for (int i = 0; i < 1000; i++) {
+      str += i;  // 每次拼接都会生成新的字符串对象
+  }
+  
+  解决方法：
+  - 使用 `StringBuilder` 或 `StringBuffer`（可变字符串类）代替：
+    
+    StringBuilder sb = new StringBuilder("a");
+    for (int i = 0; i < 1000; i++) {
+        sb.append(i);
+    }
+    String result = sb.toString();
+    
+
+#### 4.2 需要额外小心内存中保存的敏感信息
+字符串的不可变性意味着不能直接清空其内容（如存储在 `value` 数组中的密码）。一旦被创建，其内容会一直留在内存中，直到被垃圾回收器清除。
+
+解决方法：
+- 避免使用 `String` 来存储敏感信息，推荐使用 `char[]`：
+  
+  char[] password = {'p', 'a', 's', 's'};
+  Arrays.fill(password, '0');  // 覆盖内容，清除敏感信息
+  
+
+---
+
+### 5. **不可变性的延伸**
+
+#### 5.1 不可变对象的设计原则
+- 所有字段都声明为 `private` 和 `final`。
+- 不提供修改字段的方法（setter 方法）。
+- 避免返回可变对象的引用。
+
+#### 5.2 其他不可变类
+除了 `String`，还有很多不可变类：
+- 包装类：`Integer`、`Double`、`Boolean` 等。
+- `BigInteger` 和 `BigDecimal`。
+
