@@ -1,4 +1,4 @@
-public class example {
+public class String_Test {
     public static void main(String[] args) {
         String greeting = "Hello";
         String trim = greeting.substring(0, 3);
