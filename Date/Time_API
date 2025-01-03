@@ -1,0 +1,196 @@
+在 Java 中，**主流处理日期和时间的方式是使用 Java 8 引入的新时间 API (`java.time` 包)**。这个新的时间 API 是对 `java.util.Date`、`java.util.Calendar` 和 `SimpleDateFormat` 的改进，解决了旧 API 的各种缺点，如线程安全问题、操作复杂性和设计上的局限性。
+
+---
+
+### **Java 8+ 新时间 API (`java.time`)**
+
+#### **核心类**
+以下是 Java 8+ 新时间 API 中最常用的核心类：
+| 类名                        | 用途                                               |
+|-----------------------------|---------------------------------------------------|
+| **`LocalDate`**             | 表示日期（年、月、日），不包含时间和时区信息。          |
+| **`LocalTime`**             | 表示时间（时、分、秒、纳秒），不包含日期和时区信息。     |
+| **`LocalDateTime`**         | 同时表示日期和时间，不包含时区信息。                   |
+| **`ZonedDateTime`**         | 表示带时区的日期和时间。                             |
+| **`Instant`**               | 表示一个时间点（时间戳），通常用于机器时间（UTC）。      |
+| **`Duration`**              | 表示两个时间点之间的时间间隔（以秒和纳秒为单位）。      |
+| **`Period`**                | 表示两个日期之间的时间间隔（以年、月、日为单位）。       |
+| **`DateTimeFormatter`**     | 用于格式化和解析日期时间。                            |
+
+---
+
+### **优点**
+1. **不可变性：**
+   - 新时间 API 中的所有类都是不可变的（类似于 `String`），线程安全。
+
+2. **更清晰的 API 设计：**
+   - 提供了基于自然语言的操作方法，比如 `plusDays()`、`minusWeeks()` 等。
+
+3. **全面支持时区：**
+   - 使用 `ZonedDateTime` 或 `OffsetDateTime` 轻松处理时区。
+
+4. **更灵活的日期时间格式化：**
+   - 使用 `DateTimeFormatter` 来替代 `SimpleDateFormat`。
+
+---
+
+### **常用示例**
+
+#### **1. 获取当前日期和时间**
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.LocalDateTime;
+
+public class CurrentDateTimeExample {
+    public static void main(String[] args) {
+        // 当前日期
+        LocalDate currentDate = LocalDate.now();
+        System.out.println("当前日期: " + currentDate);
+
+        // 当前时间
+        LocalTime currentTime = LocalTime.now();
+        System.out.println("当前时间: " + currentTime);
+
+        // 当前日期和时间
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        System.out.println("当前日期和时间: " + currentDateTime);
+    }
+}
+
+
+**输出示例：**
+
+当前日期: 2025-01-05
+当前时间: 15:45:27.123
+当前日期和时间: 2025-01-05T15:45:27.123
+
+
+---
+
+#### **2. 自定义日期时间**
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.LocalDateTime;
+
+public class CustomDateTimeExample {
+    public static void main(String[] args) {
+        // 创建自定义日期
+        LocalDate customDate = LocalDate.of(2025, 1, 5);
+        System.out.println("自定义日期: " + customDate);
+
+        // 创建自定义时间
+        LocalTime customTime = LocalTime.of(14, 30, 15);
+        System.out.println("自定义时间: " + customTime);
+
+        // 创建自定义日期和时间
+        LocalDateTime customDateTime = LocalDateTime.of(2025, 1, 5, 14, 30, 15);
+        System.out.println("自定义日期和时间: " + customDateTime);
+    }
+}
+
+
+**输出示例：**
+
+自定义日期: 2025-01-05
+自定义时间: 14:30:15
+自定义日期和时间: 2025-01-05T14:30:15
+
+
+---
+
+#### **3. 日期加减操作**
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public class DateManipulationExample {
+    public static void main(String[] args) {
+        LocalDate today = LocalDate.now();
+
+        // 加减日期
+        LocalDate tomorrow = today.plusDays(1);
+        LocalDate lastWeek = today.minusWeeks(1);
+        LocalDate nextMonth = today.plusMonths(1);
+
+        System.out.println("今天: " + today);
+        System.out.println("明天: " + tomorrow);
+        System.out.println("上周同一天: " + lastWeek);
+        System.out.println("下个月同一天: " + nextMonth);
+    }
+}
+
+
+**输出示例：**
+
+今天: 2025-01-05
+明天: 2025-01-06
+上周同一天: 2024-12-29
+下个月同一天: 2025-02-05
+
+
+---
+
+#### **4. 日期时间格式化**
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class DateTimeFormattingExample {
+    public static void main(String[] args) {
+        LocalDateTime now = LocalDateTime.now();
+
+        // 定义格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // 格式化日期时间
+        String formattedDateTime = now.format(formatter);
+        System.out.println("格式化后的日期时间: " + formattedDateTime);
+    }
+}
+
+
+**输出示例：**
+
+格式化后的日期时间: 2025-01-05 15:45:27
+
+
+---
+
+#### **5. 日期时间解析**
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class DateTimeParsingExample {
+    public static void main(String[] args) {
+        // 定义日期字符串和格式
+        String dateTimeStr = "2025-01-05 15:45:27";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // 解析日期时间
+        LocalDateTime parsedDateTime = LocalDateTime.parse(dateTimeStr, formatter);
+        System.out.println("解析后的日期时间: " + parsedDateTime);
+    }
+}
+
+
+**输出示例：**
+
+解析后的日期时间: 2025-01-05T15:45:27
+
+
+---
+
+### **新时间 API 和旧时间 API 的对比**
+
+| 特性                     | 旧 API (`Date`, `Calendar`)            | 新 API (`java.time`)                  |
+|--------------------------|----------------------------------------|---------------------------------------|
+| **线程安全**              | 否                                     | 是                                    |
+| **易用性**                | 差，操作复杂                           | 好，API 简洁易读                      |
+| **可变性**                | 可变                                   | 不可变                                |
+| **时区支持**              | 较弱                                   | 强大，支持 `ZonedDateTime`            |
+| **格式化/解析**           | 通过 `SimpleDateFormat`，线程不安全     | 通过 `DateTimeFormatter`，线程安全     |
+
+---
