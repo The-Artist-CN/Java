@@ -1,12 +1,5 @@
 public class String_Test {
     public static void main(String[] args) {
-        String greeting = "Hello";
-        String trim = greeting.substring(0, 3);
-        String aa = new String("aa");
-        String bb = "aa";
-        String cc = "aa";
-        String hh = "hello_world";
-        System.out.println(bb == cc);
         String aa = "aa";
         String bb = new String("aa");
         String cc = bb;
