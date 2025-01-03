@@ -1,5 +1,4 @@
 这段内容是 Java 字节码文件的开头部分，它说明了一些基本的元信息，以下是详细解读：
-L 是指
 ---
 
 ### **1. `// class version 52.0 (52)`**
@@ -107,3 +106,35 @@ public class String_Test {
         super();
     }
 }
+
+1. L 的作用
+L 是 字节码指令的标签（Label），用来标记某个指令的起始位置。
+标签的作用主要是：
+跳转指令的目标：某些指令（如 GOTO、IF_* 等）需要指定跳转目标，目标通常是某个 L 标签。
+调试信息的起点或终点：标签也可以用来标记局部变量的生命周期范围。
+2. 标签的命名
+标签通常用 L 开头，后面加上数字（如 L0、L1、L2），这些标签的名称是编译器自动生成的。
+它们是为了方便引用而设定的，具体的数字没有特殊意义。
+3. 示例解读
+以你提供的代码为例：
+
+java
+复制代码
+public <init>()V
+   L0
+    LINENUMBER 1 L0
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+   L1
+    LOCALVARIABLE this LString_Test; L0 L1 0
+标签作用
+L0
+
+这是构造方法的起始位置，用来标记第一个字节码指令。
+LINENUMBER 1 L0 表示这个字节码位置对应源代码的第 1 行。
+L1
+
+这是构造方法的结束位置。
+LOCALVARIABLE this LString_Test; L0 L1 0 表示：
+局部变量 this 的生命周期从 L0 开始，到 L1 结束。
