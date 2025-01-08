@@ -1,0 +1,42 @@
+default 关键字详解
+default 是 Java 8 引入的一个关键字，用于在接口中定义默认方法。通过 default，接口可以有方法的实现，而不破坏向后兼容性。这使得接口的设计更加灵活，同时避免了在每个实现类中都需要重复代码。
+
+default 方法的特点
+方法实现：
+
+接口中的 default 方法可以有方法体（方法实现），不像传统接口中的抽象方法。
+它是接口中的一种非抽象方法。
+子类可以继承或重写：
+
+实现接口的类会自动继承 default 方法。
+如果需要，子类可以重写 default 方法。
+不破坏现有代码：
+
+当为接口添加新方法时，使用 default 可以为其提供一个默认实现，从而避免让所有实现该接口的类都必须实现新方法
+
+
+注意事项
+不能为 Object 类的方法提供 default 实现：
+
+接口中的 default 方法不能覆盖 Object 类的方法（如 equals、hashCode、toString）。否则会报编译错误。
+
+
+
+
+interface MyInterface {
+    default String toString() {  // 错误：会导致编译失败
+        return "Default toString";
+    }
+}
+
+
+
+
+优先级规则：
+
+如果类中有方法与接口的 default 方法同名，类中的方法优先。
+优先级顺序：
+类方法 > 接口的 default 方法 > 父接口的 default 方法。
+避免滥用：
+
+虽然 default 方法增加了灵活性，但应谨慎使用，避免接口变得复杂和难以维护。。

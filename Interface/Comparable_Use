@@ -1,0 +1,48 @@
+Comparable 接口是 Java 中用于比较对象大小的接口，位于 java.lang 包中。它的主要作用是让实现类的对象能够通过某种逻辑进行排序。使用该接口时，需要实现其中的唯一方法：
+
+
+
+public interface Comparable<T> {
+    int compareTo(T o);
+}
+
+
+
+方法详解
+int compareTo(T o)
+参数：o 是要比较的对象。
+返回值：
+正整数：当前对象大于比较对象。
+零：当前对象等于比较对象。
+负整数：当前对象小于比较对象。
+使用场景
+对象的自然排序（natural ordering）。
+与 Collections.sort() 或 Arrays.sort() 配合使用，进行排序。
+
+Comparator 是 Java 中的一个接口，用于自定义对象的排序规则。它位于 java.util 包中，与 Comparable 接口不同的是，Comparator 可以定义多个排序规则，而无需修改对象本身的实现。
+
+Comparator 接口的常用方法有：
+
+常用方法
+int compare(T o1, T o2)
+
+比较两个对象。
+返回值：
+正整数：o1 大于 o2。
+零：o1 等于 o2。
+负整数：o1 小于 o2。
+Comparator.comparing(Function<T, U> keyExtractor)（Java 8 引入）
+
+根据指定的字段生成比较器。
+thenComparing(Comparator<? super T> other)
+
+用于链式比较。
+reversed()
+
+返回一个与当前比较器顺序相反的比较器。
+
+
+
+@FunctionalInterface 是 Java 8 引入的注解，用于标记一个接口为函数式接口（Functional Interface）。函数式接口是指只包含一个抽象方法的接口，可以被用于 Lambda 表达式、方法引用或构造器引用。
+
+Comparator 是一个典型的函数式接口，因为它只有一个抽象方法 compare(T o1, T o2)，因此我们可以直接用 Lambda 表达式来实现它。
